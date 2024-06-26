@@ -15,7 +15,12 @@ public class EnergyBoostMixingTechnique : IMixingTechnique
         foreach (var energyBoostModifier in EnergyBoostModifiers)
         {
             var modifiedCamelotScale = GetModifiedCamelotScale(mainSong.Key.CamelotScale, energyBoostModifier);
-            var matchingKeySongs = songs.Where(s => s.Key.CamelotScale.Equals(modifiedCamelotScale));
+
+            // Add songs with the same key as mainSong
+            suggestedSongs.AddRange(songs.Where(song => song.Key.CamelotScale.Equals(mainSong.Key.CamelotScale)));
+
+            // Add songs with a matching modified key
+            var matchingKeySongs = songs.Where(song => song.Key.CamelotScale.Equals(modifiedCamelotScale));
             suggestedSongs.AddRange(matchingKeySongs);
         }
 

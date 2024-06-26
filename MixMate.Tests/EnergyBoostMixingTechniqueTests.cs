@@ -201,6 +201,53 @@ public class EnergyBoostMixingTechniqueTests
         result.Should().NotContain(nonMatch);
     }
 
+    [Fact]
+    public void GivenSameKeySong_GetSuggestedSongs_ShouldReturnMatchingSong()
+    {
+        //Arrange
+        var mainSong = new Song(
+            0,
+            "Solar System",
+            "Sub Focus",
+            "Solar System / Siren",
+            "Drum & Bass",
+            174,
+            new TimeSpan(0, 4, 48),
+            new Key("F", Scale.Minor, Signature.None, new CamelotScale(4, "A")),
+            DateTime.UtcNow);
+        var harmonicMatch = new Song(
+            1,
+            "Devotion (feat. Cameron Hayes)",
+            "Dimension",
+            "Organ",
+            "Drum & Bass",
+            174,
+            new TimeSpan(0, 3, 10),
+            new Key("F", Scale.Minor, Signature.None, new CamelotScale(4, "A")),
+            DateTime.UtcNow);
+        var nonMatch = new Song(
+            2,
+            "Afterglow",
+            "Wilkinson",
+            " Lazers Not Included",
+            "Drum & Bass",
+            174,
+            new TimeSpan(0, 3, 45),
+            new Key("G", Scale.Major, Signature.None, new CamelotScale(6, "B")),
+            DateTime.UtcNow);
+        var songs = new List<Song> { mainSong, harmonicMatch, nonMatch };
+
+        var mixingTechnique = new EnergyBoostMixingTechnique();
+
+        //Act
+        var result = mixingTechnique.GetSuggestedSongs(mainSong, songs);
+
+        //Assert
+        result.Should().Contain(harmonicMatch);
+        result.Should().NotContain(mainSong);
+        result.Should().NotContain(nonMatch);
+    }
+
     #endregion GetSuggestedSongs
 
     #region GetModifiedCamelotScale
