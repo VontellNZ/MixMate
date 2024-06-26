@@ -8,21 +8,28 @@ public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques)
 
     public List<Song> GetSuggestedSongs(string techniqueName, Song mainSong, List<Song> songs)
     {
-        var technique = GetMixingTechniqueByName(techniqueName) 
-            ?? throw new ArgumentException($"Mixing technique '{techniqueName}' not found.");
-
-        return technique.GetSuggestedSongs(mainSong, songs);
+        var suggestedSongs = new List<Song>();
+        try
+        {
+            var technique = GetMixingTechniqueByName(techniqueName);
+            suggestedSongs = technique.GetSuggestedSongs(mainSong, songs);
+        }
+        catch (ArgumentException ex) 
+        {
+            Console.WriteLine(ex.ToString()); //TODO: Logging
+        }
+        return suggestedSongs;
     }
 
-    private IMixingTechnique? GetMixingTechniqueByName(string name)
+    private IMixingTechnique GetMixingTechniqueByName(string techniqueName)
     {
         foreach (var technique in _mixingTechniques)
         {
-            if (technique.GetType().Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+            if (technique.GetType().Name.Equals(techniqueName, StringComparison.OrdinalIgnoreCase))
             {
                 return technique;
             }
         }
-        return null;
+        throw new ArgumentException($"Mixing technique '{techniqueName}' not found.");
     }
 }
