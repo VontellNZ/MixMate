@@ -7,12 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register IMixingTechnique implementations
-builder.Services.AddTransient<IMixingTechnique, SmoothMixingTechnique>();
-builder.Services.AddTransient<IMixingTechnique, EnergyBoostMixingTechnique>();
-
-// Register the MixingService
-builder.Services.AddTransient<MixingService>();
+// Register services
+builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
 
 var app = builder.Build();
 

@@ -1,7 +1,30 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Mix Mate</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Mix Mate</h1>
 
-Welcome to your new app.
+<InputFile OnChange="@LoadFiles" class="form-control" multiple accept=".txt" />
+
+@if (errors.Count > 0)
+{
+    <h2>Error</h2>
+    <ul class="=text-danger">
+        @foreach (var error in errors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}
+
+@if (songs.Count > 0)
+{
+    <h2 class="mt-3" >Songs</h2>
+    <ul>
+        @foreach (var song in songs)
+        {
+            <li>@song.Title by @song.Artist</li>
+        }
+    </ul>
+}
