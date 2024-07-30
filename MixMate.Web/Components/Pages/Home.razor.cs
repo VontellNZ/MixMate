@@ -9,7 +9,7 @@ namespace MixMate.Web.Components.Pages;
 
 public partial class Home
 {
-    [Inject] 
+    [Inject]
     private IFileProcessingService FileProcessingService { get; set; }
 
     private const string _allowedFileExtension = ".txt";

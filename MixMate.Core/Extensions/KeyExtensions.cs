@@ -77,7 +77,7 @@ public static class KeyExtensions
             return new Key(note, Scale.Major, Signature.None);
 
         //After note check for a signature symbol - this is always after the note
-        Signature signature = Signatures.ContainsKey(valueArray[1]) 
+        Signature signature = Signatures.ContainsKey(valueArray[1])
             ? Signatures[valueArray[1]]
             : Signature.None;
 
