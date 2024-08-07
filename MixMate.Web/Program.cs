@@ -1,7 +1,4 @@
-using MixMate.Core.Interfaces;
-using MixMate.Core.Services;
-using MixMate.DataAccess.Database;
-using MixMate.DataAccess.Repositories;
+using MixMate.Web;
 using MixMate.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,18 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register services
-builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
+//Dependency injection
+builder.Services.RegisterServices();
 
-// Register IDatabaseContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("The DefaultConnection connection string is not configured.");
+builder.Services.RegisterDatabase(connectionString);
 
-builder.Services.AddSingleton<IDatabaseContext>(provider =>
-    new DatabaseContext(connectionString));
-
-// Register repositories
-builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.RegisterRepositories();
 
 var app = builder.Build();
 
