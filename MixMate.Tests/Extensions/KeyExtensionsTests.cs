@@ -3,7 +3,7 @@ using MixMate.Core.Entities;
 using MixMate.Core.Enums;
 using MixMate.Core.Extensions;
 
-namespace MixMate.Tests.Extensions;
+namespace MixMate.Core.Tests.Extensions;
 
 public class KeyExtensionsTests
 {
