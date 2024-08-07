@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using MixMate.Core.Interfaces;
 using System.Data;
 
 namespace MixMate.DataAccess.Database;

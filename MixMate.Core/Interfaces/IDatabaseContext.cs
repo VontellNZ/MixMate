@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace MixMate.DataAccess.Database
+namespace MixMate.Core.Interfaces
 {
     public interface IDatabaseContext
     {

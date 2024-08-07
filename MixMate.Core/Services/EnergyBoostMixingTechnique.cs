@@ -1,4 +1,5 @@
 ﻿using MixMate.Core.Entities;
+using MixMate.Core.Interfaces;
 
 namespace MixMate.Core.Services;
 

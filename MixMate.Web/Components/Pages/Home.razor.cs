@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MixMate.Core.Entities;
-using MixMate.Core.Services;
+using MixMate.Core.Interfaces;
 
 namespace MixMate.Web.Components.Pages;
 

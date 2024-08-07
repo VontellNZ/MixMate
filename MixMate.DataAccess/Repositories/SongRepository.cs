@@ -1,11 +1,11 @@
 ﻿using Dapper;
 using MixMate.Core.Entities;
-using MixMate.DataAccess.Database;
+using MixMate.Core.Interfaces;
 using MixMate.DataAccess.Exceptions;
 
 namespace MixMate.DataAccess.Repositories;
 
-public class SongRepository(IDatabaseContext dbContext)
+public class SongRepository(IDatabaseContext dbContext) : ISongRepository
 {
     private readonly IDatabaseContext _dbContext = dbContext;
 
