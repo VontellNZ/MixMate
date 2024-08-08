@@ -9,11 +9,11 @@ namespace MixMate.Web.Components.Pages;
 
 public partial class Home
 {
-    [Inject]
-    private IFileProcessingService FileProcessingService { get; set; }
+    [Inject] private IFileProcessingService FileProcessingService { get; set; }
+    [Inject] private ISongService SongService { get; set; }
 
     private const string _allowedFileExtension = ".txt";
-    private const int _maxAllowedFiles = 1; //TODO: look into moving these to appsettings
+    private const int _maxAllowedFiles = 1;
     private readonly List<string> errors = [];
     private List<Song> songs = [];
 
@@ -39,6 +39,8 @@ public partial class Home
                 }
 
                 songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
+
+                await SongService.AddSongsAsync(songs);
             }
             catch (Exception ex)
             {

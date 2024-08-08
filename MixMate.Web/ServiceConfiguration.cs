@@ -10,6 +10,7 @@ public static class ServiceConfiguration
     public static void RegisterServices(this IServiceCollection services)
     {
         services.AddScoped<IFileProcessingService, FileProcessingService>();
+        services.AddTransient<ISongService, SongService>();
     }
 
     public static void RegisterDatabase(this IServiceCollection services)
