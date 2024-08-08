@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using MixMate.Core.Entities;
 
-namespace MixMate.Core.Services
+namespace MixMate.Core.Interfaces
 {
     public interface IFileProcessingService
     {

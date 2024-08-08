@@ -3,7 +3,7 @@ using MixMate.Core.Entities;
 using MixMate.Core.Enums;
 using MixMate.Core.Services;
 
-namespace MixMate.Tests.Services;
+namespace MixMate.Core.Tests.Services;
 
 public class SmoothMixingTechniqueTests
 {

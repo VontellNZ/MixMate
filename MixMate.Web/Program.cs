@@ -1,4 +1,5 @@
-using MixMate.Core.Services;
+using MixMate.Core.Interfaces;
+using MixMate.Web;
 using MixMate.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +8,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register services
-builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
+//Dependency injection
+builder.Services.RegisterServices();
+builder.Services.RegisterDatabase();
+builder.Services.RegisterRepositories();
 
 var app = builder.Build();
+
+// Ensure database and tables exist
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
+    await context.Initialize();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

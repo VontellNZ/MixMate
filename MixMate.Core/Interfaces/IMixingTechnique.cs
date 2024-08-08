@@ -1,6 +1,6 @@
 ﻿using MixMate.Core.Entities;
 
-namespace MixMate.Core.Services;
+namespace MixMate.Core.Interfaces;
 
 public interface IMixingTechnique
 {
