@@ -1,3 +1,4 @@
+using MixMate.Core.Interfaces;
 using MixMate.Web;
 using MixMate.Web.Components;
 
@@ -9,14 +10,17 @@ builder.Services.AddRazorComponents()
 
 //Dependency injection
 builder.Services.RegisterServices();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("The DefaultConnection connection string is not configured.");
-builder.Services.RegisterDatabase(connectionString);
-
+builder.Services.RegisterDatabase();
 builder.Services.RegisterRepositories();
 
 var app = builder.Build();
+
+// Ensure database and tables exist
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
+    await context.Initialize();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

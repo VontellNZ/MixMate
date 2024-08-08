@@ -12,9 +12,9 @@ public static class ServiceConfiguration
         services.AddScoped<IFileProcessingService, FileProcessingService>();
     }
 
-    public static void RegisterDatabase(this IServiceCollection services, string connectionString)
+    public static void RegisterDatabase(this IServiceCollection services)
     {
-        services.AddSingleton<IDatabaseContext>(provider => new DatabaseContext(connectionString));
+        services.AddSingleton<IDatabaseContext, DatabaseContext>();
     }
 
     public static void RegisterRepositories(this IServiceCollection services)
