@@ -37,7 +37,8 @@ public class DatabaseContext(IConfiguration configuration) : IDatabaseContext
                         Signature TEXT NOT NULL,
                         CamelotScaleNumber INTEGER NOT NULL,
                         CamelotScaleLetter TEXT NOT NULL,
-                        DateAdded TEXT NOT NULL
+                        DateAdded TEXT NOT NULL,
+                        UNIQUE (Title, Artist)
                     );";
 
                 await connection.ExecuteAsync(sql);
