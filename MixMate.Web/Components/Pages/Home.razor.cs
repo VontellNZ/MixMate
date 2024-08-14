@@ -14,16 +14,24 @@ public partial class Home
 
     private const string _allowedFileExtension = ".txt";
     private const int _maxAllowedFiles = 1;
-    private readonly List<string> errors = [];
-    private List<Song> songs = [];
+    private readonly List<string> Errors = [];
+    private List<Song> Songs = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var songs = await SongService.GetAllSongsAsync();
+        Songs = songs.ToList();
+
+        await base.OnInitializedAsync();
+    }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        errors.Clear();
+        Errors.Clear();
 
         if (e.FileCount > _maxAllowedFiles)
         {
-            errors.Add($"Error: Attempting to upload {e.FileCount} files, but only {_maxAllowedFiles} files are allowed.");
+            Errors.Add($"Error: Attempting to upload {e.FileCount} files, but only {_maxAllowedFiles} files are allowed.");
             return;
         }
 
@@ -34,17 +42,17 @@ public partial class Home
                 var extension = Path.GetExtension(file.Name);
                 if (!extension.Equals(_allowedFileExtension))
                 {
-                    errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
+                    Errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
                     continue;
                 }
 
-                songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
+                Songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
 
-                await SongService.AddSongsAsync(songs);
+                await SongService.AddSongsAsync(Songs);
             }
             catch (Exception ex)
             {
-                errors.Add($"File: {file.Name}, Error: {ex.Message}");
+                Errors.Add($"File: {file.Name}, Error: {ex.Message}");
                 throw;
             }
         }
