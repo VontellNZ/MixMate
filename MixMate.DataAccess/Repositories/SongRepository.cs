@@ -25,8 +25,8 @@ public class SongRepository(IDatabaseContext dbContext) : ISongRepository
     public async Task AddSongsAsync(List<Song> songs)
     {
         using var connection = _dbContext.CreateConnection();
-        var sql = "INSERT INTO Songs (Title, Artist, Album, Genre, Bpm, Duration, Note, Scale, Signature, CamelotScaleNumber, CamelotScaleLetter, DateAdded) " +
-              "VALUES (@Title, @Artist, @Album, @Genre, @Bpm, @Duration, @Note, @Scale, @Signature, @CamelotScaleNumber, @CamelotScaleLetter, @DateAdded)";
+        var sql = "INSERT INTO Songs (Title, Artist, Album, Genre, Bpm, Duration, Key, DateAdded) " +
+              "VALUES (@Title, @Artist, @Album, @Genre, @Bpm, @Duration, @Key, @DateAdded)";
 
         foreach (var song in songs)
         {
@@ -40,11 +40,7 @@ public class SongRepository(IDatabaseContext dbContext) : ISongRepository
                     song.Genre,
                     song.Bpm,
                     Duration = song.Duration.Ticks,
-                    song.Key.Note,
-                    song.Key.Scale,
-                    song.Key.Signature,
-                    CamelotScaleNumber = song.Key.CamelotScale.Number,
-                    CamelotScaleLetter = song.Key.CamelotScale.Letter,
+                    Key = song.Key.GetFullKey(),
                     song.DateAdded
                 });
             }

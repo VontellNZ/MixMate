@@ -32,11 +32,7 @@ public class DatabaseContext(IConfiguration configuration) : IDatabaseContext
                         Genre TEXT,
                         Bpm REAL,
                         Duration INTEGER, -- Store TimeSpan as ticks
-                        Note TEXT NOT NULL,
-                        Scale TEXT NOT NULL,
-                        Signature TEXT NOT NULL,
-                        CamelotScaleNumber INTEGER NOT NULL,
-                        CamelotScaleLetter TEXT NOT NULL,
+                        Key TEXT NOT NULL,
                         DateAdded TEXT NOT NULL,
                         UNIQUE (Title, Artist)
                     );";
