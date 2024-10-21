@@ -19,6 +19,7 @@ public static class ServiceConfiguration
     {
         services.AddSingleton<IDatabaseContext, DatabaseContext>();
         SqlMapper.AddTypeHandler(new TimeSpanHandler());
+        SqlMapper.AddTypeHandler(new KeyHandler());
     }
 
     public static void RegisterRepositories(this IServiceCollection services)
