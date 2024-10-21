@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace MixMate.Web.Components.Pages;
 
@@ -15,12 +16,12 @@ public partial class Home
     private const string _allowedFileExtension = ".txt";
     private const int _maxAllowedFiles = 1;
     private readonly List<string> Errors = [];
-    private List<Song> Songs = [];
+    private ObservableCollection<Song> Songs = [];
 
     protected override async Task OnInitializedAsync()
     {
         var songs = await SongService.GetAllSongsAsync();
-        Songs = songs.ToList();
+        Songs = new ObservableCollection<Song>(songs);
 
         await base.OnInitializedAsync();
     }
@@ -46,9 +47,14 @@ public partial class Home
                     continue;
                 }
 
-                Songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
+                var songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
 
-                await SongService.AddSongsAsync(Songs);
+                await SongService.AddSongsAsync(songs);
+
+                foreach (var song in songs)
+                {
+                    Songs.Add(song);
+                }
             }
             catch (Exception ex)
             {
