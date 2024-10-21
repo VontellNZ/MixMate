@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using MixMate.Core.Constants;
 using MixMate.Core.Entities;
 using MixMate.Core.Extensions;
 using MixMate.Core.Interfaces;
 using System.Globalization;
+using static MixMate.Core.Constants.TracklistHeaders;
 
 namespace MixMate.Core.Services;
 
 public class FileProcessingService : IFileProcessingService
 {
+    private string[] _columns = [];
+    private Dictionary<string, int> _fields = [];
+
     public async Task<List<Song>> ConvertFileLinesToSongsAsync(IBrowserFile file)
     {
         ArgumentNullException.ThrowIfNull(file);
@@ -17,33 +22,27 @@ public class FileProcessingService : IFileProcessingService
         using (var stream = file.OpenReadStream())
         using (var reader = new StreamReader(stream))
         {
-            string? line;
-            bool isFirstLine = true;
-            Dictionary<string, int> fields = [];
+            var firstLine = await reader.ReadLineAsync();
+            if (firstLine == null) return songs; //Perhaps throw an exception here
 
+            //Making sure these are empty at the start of processing a new file
+            _fields = [];
+            _columns = [];
+
+            PopulateTrackFields(firstLine);
+
+            string? line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
-                var columns = line.Split('\t');
+                _columns = line.Split('\t');
 
-                if (isFirstLine)
-                {
-                    for (int i = 0; i < columns.Length; i++)
-                    {
-                        fields.Add(columns[i], i);
-                    }
-
-                    isFirstLine = false;
-                    continue;
-                }
-
-                string title = columns[fields["Track Title"]];
-                string artist = columns[fields["Artist"]];
-                string album = columns[fields["Album"]];
-                string genre = columns[fields["Genre"]];
-                double bpm = double.Parse(columns[fields["BPM"]], CultureInfo.InvariantCulture);
-                TimeSpan duration = TimeSpan.Parse(columns[fields["Time"]]);
-                Key key = columns[fields["Key"]].GetKeyFromString();
-                DateTime dateAdded = DateTime.Now;
+                string title = GetFieldValueFromColumn(TrackTitle);
+                string artist = GetFieldValueFromColumn(Artist);
+                string album = GetFieldValueFromColumn(Album);
+                string genre = GetFieldValueFromColumn(Genre);
+                double bpm = double.Parse(GetFieldValueFromColumn(Bpm), CultureInfo.InvariantCulture);
+                TimeSpan duration = TimeSpan.Parse(GetFieldValueFromColumn(Duration));
+                Key key = GetFieldValueFromColumn(TracklistHeaders.Key).GetKeyFromString();
 
                 var song = new Song
                 {
@@ -54,7 +53,7 @@ public class FileProcessingService : IFileProcessingService
                     Bpm = bpm,
                     Duration = duration,
                     Key = key,
-                    DateAdded = dateAdded
+                    DateAdded = DateTime.Now
                 };
 
                 songs.Add(song);
@@ -63,4 +62,18 @@ public class FileProcessingService : IFileProcessingService
 
         return songs;
     }
+
+    private void PopulateTrackFields(string firstLine)
+    {
+        _columns = firstLine.Split('\t');
+        for (int i = 0; i < _columns.Length; i++)
+        {
+            _fields.Add(_columns[i], i);
+        }
+    }
+
+    private string GetFieldValueFromColumn(string key) =>
+        _fields.TryGetValue(key, out int value)
+            ? _columns[value]
+            : string.Empty;
 }
