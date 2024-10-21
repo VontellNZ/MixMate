@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using MixMate.Core.Constants;
 using MixMate.Core.Entities;
 using MixMate.Core.Extensions;
 using MixMate.Core.Interfaces;
 using System.Globalization;
+using static MixMate.Core.Constants.TracklistHeaders;
 
 namespace MixMate.Core.Services;
 
 public class FileProcessingService : IFileProcessingService
 {
+    private string[] _columns = [];
+    private Dictionary<string, int> _fields = [];
+
     public async Task<List<Song>> ConvertFileLinesToSongsAsync(IBrowserFile file)
     {
         ArgumentNullException.ThrowIfNull(file);
@@ -17,45 +22,38 @@ public class FileProcessingService : IFileProcessingService
         using (var stream = file.OpenReadStream())
         using (var reader = new StreamReader(stream))
         {
-            string? line;
-            bool isFirstLine = true;
+            var firstLine = await reader.ReadLineAsync();
+            if (firstLine == null) return songs; //Perhaps throw an exception here
 
+            //Making sure these are empty at the start of processing a new file
+            _fields = [];
+            _columns = [];
+
+            PopulateTrackFields(firstLine);
+
+            string? line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
-                if (isFirstLine)
-                {
-                    // Skip the header line
+                _columns = line.Split('\t');
 
-                    //TODO: Look into using header line for associating index with fields to increase stability of this code
-                    isFirstLine = false;
-                    continue;
-                }
-
-                var columns = line.Split('\t');
-
-                if (columns.Length < 8) continue;
-
-                int id = int.Parse(columns[0]);
-                string title = columns[2];
-                string artist = columns[3];
-                string album = columns[4];
-                //string genre = columns[5];
-                double bpm = double.Parse(columns[5], CultureInfo.InvariantCulture);
-                TimeSpan duration = TimeSpan.Parse(columns[6]);
-                Key key = columns[7].GetKeyFromString();
-                DateTime dateAdded = DateTime.Now;
+                string title = GetFieldValueFromColumn(TrackTitle);
+                string artist = GetFieldValueFromColumn(Artist);
+                string album = GetFieldValueFromColumn(Album);
+                string genre = GetFieldValueFromColumn(Genre);
+                double bpm = double.Parse(GetFieldValueFromColumn(Bpm), CultureInfo.InvariantCulture);
+                TimeSpan duration = TimeSpan.Parse(GetFieldValueFromColumn(Duration));
+                Key key = GetFieldValueFromColumn(TracklistHeaders.Key).GetKeyFromString();
 
                 var song = new Song
                 {
-                    Id = id,
                     Title = title,
                     Artist = artist,
                     Album = album,
-                    //Genre = genre,
+                    Genre = genre,
                     Bpm = bpm,
                     Duration = duration,
                     Key = key,
-                    DateAdded = dateAdded
+                    DateAdded = DateTime.Now
                 };
 
                 songs.Add(song);
@@ -64,4 +62,18 @@ public class FileProcessingService : IFileProcessingService
 
         return songs;
     }
+
+    private void PopulateTrackFields(string firstLine)
+    {
+        _columns = firstLine.Split('\t');
+        for (int i = 0; i < _columns.Length; i++)
+        {
+            _fields.Add(_columns[i], i);
+        }
+    }
+
+    private string GetFieldValueFromColumn(string key) =>
+        _fields.TryGetValue(key, out int value)
+            ? _columns[value]
+            : string.Empty;
 }
