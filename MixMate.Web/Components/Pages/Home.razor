@@ -5,7 +5,7 @@
 
 <h1>Mix Mate</h1>
 
-<InputFile OnChange="@LoadFiles" class="form-control" multiple accept=".txt" />
+<InputFile OnChange="@LoadFiles" class="form-control p-1 m-1" multiple accept=".txt" />
 
 @if (Errors.Count > 0)
 {
@@ -27,6 +27,6 @@
         <PropertyColumn Property="song => song.Genre" />
         <PropertyColumn Property="song => song.Bpm" />
         <PropertyColumn Property="song => song.Duration" />
-        <PropertyColumn Property="song => song.Key" />
+        <PropertyColumn Property="song => song.Key.GetFullKey()" />
     </Columns>
 </MudDataGrid>
