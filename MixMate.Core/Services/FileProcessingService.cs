@@ -19,39 +19,38 @@ public class FileProcessingService : IFileProcessingService
         {
             string? line;
             bool isFirstLine = true;
+            Dictionary<string, int> fields = [];
 
             while ((line = await reader.ReadLineAsync()) != null)
             {
+                var columns = line.Split('\t');
+
                 if (isFirstLine)
                 {
-                    // Skip the header line
+                    for (int i = 0; i < columns.Length; i++)
+                    {
+                        fields.Add(columns[i], i);
+                    }
 
-                    //TODO: Look into using header line for associating index with fields to increase stability of this code
                     isFirstLine = false;
                     continue;
                 }
 
-                var columns = line.Split('\t');
-
-                if (columns.Length < 8) continue;
-
-                int id = int.Parse(columns[0]);
-                string title = columns[2];
-                string artist = columns[3];
-                string album = columns[4];
-                //string genre = columns[5];
-                double bpm = double.Parse(columns[5], CultureInfo.InvariantCulture);
-                TimeSpan duration = TimeSpan.Parse(columns[6]);
-                Key key = columns[7].GetKeyFromString();
+                string title = columns[fields["Track Title"]];
+                string artist = columns[fields["Artist"]];
+                string album = columns[fields["Album"]];
+                string genre = columns[fields["Genre"]];
+                double bpm = double.Parse(columns[fields["BPM"]], CultureInfo.InvariantCulture);
+                TimeSpan duration = TimeSpan.Parse(columns[fields["Time"]]);
+                Key key = columns[fields["Key"]].GetKeyFromString();
                 DateTime dateAdded = DateTime.Now;
 
                 var song = new Song
                 {
-                    Id = id,
                     Title = title,
                     Artist = artist,
                     Album = album,
-                    //Genre = genre,
+                    Genre = genre,
                     Bpm = bpm,
                     Duration = duration,
                     Key = key,
