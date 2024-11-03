@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using MixMate.Core.Entities
 @rendermode InteractiveServer
 
 <PageTitle>Mix Mate</PageTitle>
@@ -19,8 +20,9 @@
 }
 
 <MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
-<MudDataGrid Items="Songs">
+<MudDataGrid Items="Songs" T="Song" SelectOnRowClick="true" MultiSelection="false" @bind-SelectedItems="selectedSongs">
     <Columns>
+        <SelectColumn T="Song" />
         <PropertyColumn Property="song => song.Title" />
         <PropertyColumn Property="song => song.Artist" />
         <PropertyColumn Property="song => song.Album" />
@@ -30,3 +32,8 @@
         <PropertyColumn Property="song => song.Key.GetFullKey()" />
     </Columns>
 </MudDataGrid>
+
+@code 
+{
+    HashSet<Song> selectedSongs = new();
+}
