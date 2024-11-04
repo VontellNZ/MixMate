@@ -23,7 +23,7 @@
     
 <MudCard class="p-1 m-1">
     <MudCardContent>
-        @if (_mainSong == null)
+        @if (MainSong == null)
         {
             <MudText>
                 Select a song from below to start mixing!
@@ -32,20 +32,20 @@
         else
         {
             <MudText>
-                Main Song: @_mainSong?.Title - @_mainSong?.Artist
+                Main Song: @MainSong?.Title - @MainSong?.Artist
             </MudText>
         }          
     </MudCardContent>
 </MudCard>
 
-<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true">
+<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true" RowStyleFunc="@RowStyleFunc">
     <Columns>
-        <PropertyColumn Property="song => song.Title" />
+        <PropertyColumn Property="song => song.Title"/>
         <PropertyColumn Property="song => song.Artist" />
         <PropertyColumn Property="song => song.Album" />
         <PropertyColumn Property="song => song.Genre" />
         <PropertyColumn Property="song => song.Bpm" />
         <PropertyColumn Property="song => song.Duration" />
-        <PropertyColumn Property="song => song.Key.GetFullKey()" />
+        <PropertyColumn Property="song => song.Key.GetFullKeyForDisplay()" />
     </Columns>
 </MudDataGrid>

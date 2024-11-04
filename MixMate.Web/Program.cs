@@ -11,8 +11,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 //Dependency injection
-builder.Services.RegisterServices();
 builder.Services.RegisterDatabase();
+builder.Services.RegisterServices();
 builder.Services.RegisterRepositories();
 
 var app = builder.Build();

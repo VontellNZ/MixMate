@@ -6,17 +6,29 @@ using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
 using MudBlazor;
 using System.Collections.ObjectModel;
+using static MudBlazor.CategoryTypes;
 
 namespace MixMate.Web.Components.Pages;
 
 public partial class Home
 {
+    public Song? MainSong
+    {
+        get => _mainSong;
+        set
+        {
+            _mainSong = value;
+            GetSuggestedSongs();
+        }
+    }
     [Inject] private IFileProcessingService FileProcessingService { get; set; }
     [Inject] private ISongService SongService { get; set; }
+    [Inject] private IMixingService MixingService { get; set; }
 
     private const int _maxAllowedFiles = 1;
     private readonly List<string> Errors = [];
     private ObservableCollection<Song> _songs = [];
+    private List<Song> _suggestedSongs = [];
     private Song? _mainSong;
 
     protected override async Task OnInitializedAsync()
@@ -47,5 +59,22 @@ public partial class Home
     }
 
     private void SetMainSong(DataGridRowClickEventArgs<Song> selectedSong) 
-        => _mainSong = selectedSong.Item;
+        => MainSong = selectedSong.Item;
+
+    private void GetSuggestedSongs()
+    {
+        if (MainSong == null) return;
+
+        _suggestedSongs = MixingService.GetSuggestedSongs("SmoothMixingTechnique", (Song)MainSong, _songs.ToList());
+    }
+
+    private string RowStyleFunc(Song arg1, int index)
+    {
+        if (_suggestedSongs.Contains(arg1))
+        {
+            return "background-color:LightGreen";
+        }
+
+        return "background-color:white";
+    }
 }
