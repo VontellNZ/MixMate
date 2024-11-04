@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
+using MudBlazor;
 using System.Collections.ObjectModel;
 
 namespace MixMate.Web.Components.Pages;
@@ -13,15 +14,15 @@ public partial class Home
     [Inject] private IFileProcessingService FileProcessingService { get; set; }
     [Inject] private ISongService SongService { get; set; }
 
-    private const string _allowedFileExtension = ".txt";
     private const int _maxAllowedFiles = 1;
     private readonly List<string> Errors = [];
-    private ObservableCollection<Song> Songs = [];
+    private ObservableCollection<Song> _songs = [];
+    private Song? _mainSong;
 
     protected override async Task OnInitializedAsync()
     {
         var songs = await SongService.GetAllSongsAsync();
-        Songs = new ObservableCollection<Song>(songs);
+        _songs = new ObservableCollection<Song>(songs);
 
         await base.OnInitializedAsync();
     }
@@ -36,31 +37,15 @@ public partial class Home
             return;
         }
 
-        foreach (var file in e.GetMultipleFiles(_maxAllowedFiles))
+        var fileLoadResult = await FileProcessingService.LoadSongsFromFiles(e);
+        foreach (var song in fileLoadResult.Songs)
         {
-            try
-            {
-                var extension = Path.GetExtension(file.Name);
-                if (!extension.Equals(_allowedFileExtension))
-                {
-                    Errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
-                    continue;
-                }
-
-                var songs = await FileProcessingService.ConvertFileLinesToSongsAsync(file);
-
-                await SongService.AddSongsAsync(songs);
-
-                foreach (var song in songs)
-                {
-                    Songs.Add(song);
-                }
-            }
-            catch (Exception ex)
-            {
-                Errors.Add($"File: {file.Name}, Error: {ex.Message}");
-                throw;
-            }
+            _songs.Add(song);
         }
+
+        Errors.AddRange(fileLoadResult.Errors);
     }
+
+    private void SetMainSong(DataGridRowClickEventArgs<Song> selectedSong) 
+        => _mainSong = selectedSong.Item;
 }

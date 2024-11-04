@@ -8,10 +8,44 @@ using static MixMate.Core.Constants.TracklistHeaders;
 
 namespace MixMate.Core.Services;
 
-public class FileProcessingService : IFileProcessingService
+public class FileProcessingService(ISongService songService) : IFileProcessingService
 {
+    private const int MaxAllowedFiles = 1;
+    private const string AllowedFileExtension = ".txt";
+    private readonly ISongService _songService = songService;
     private string[] _columns = [];
     private Dictionary<string, int> _fields = [];
+
+    public async Task<FileLoadResult> LoadSongsFromFiles(InputFileChangeEventArgs e)
+    {
+        var songs = new List<Song>();
+        var errors = new List<string>();
+
+        foreach (var file in e.GetMultipleFiles(MaxAllowedFiles))
+        {
+            try
+            {
+                var extension = Path.GetExtension(file.Name);
+                if (!extension.Equals(AllowedFileExtension))
+                {
+                    //logging
+                    errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
+                    continue;
+                }
+
+                var processedSongs = await ConvertFileLinesToSongsAsync(file);
+                await _songService.AddSongsAsync(processedSongs);
+                songs.AddRange(processedSongs);
+            }
+            catch (Exception ex)
+            {
+                //Logging
+                errors.Add($"Error occurred during file processing. File: {file.Name}, Error: {ex.Message}");
+            }
+        }
+
+        return new FileLoadResult(songs, errors);
+    }
 
     public async Task<List<Song>> ConvertFileLinesToSongsAsync(IBrowserFile file)
     {

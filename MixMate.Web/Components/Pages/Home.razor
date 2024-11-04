@@ -1,11 +1,10 @@
 ﻿@page "/"
+@using MixMate.Core.Entities
 @rendermode InteractiveServer
 
 <PageTitle>Mix Mate</PageTitle>
 
 <h1>Mix Mate</h1>
-
-<InputFile OnChange="@LoadFiles" class="form-control p-1 m-1" multiple accept=".txt" />
 
 @if (Errors.Count > 0)
 {
@@ -18,8 +17,28 @@
     </ul>
 }
 
+<InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
+
 <MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
-<MudDataGrid Items="Songs">
+    
+<MudCard class="p-1 m-1">
+    <MudCardContent>
+        @if (_mainSong == null)
+        {
+            <MudText>
+                Select a song from below to start mixing!
+            </MudText>
+        }
+        else
+        {
+            <MudText>
+                Main Song: @_mainSong?.Title - @_mainSong?.Artist
+            </MudText>
+        }          
+    </MudCardContent>
+</MudCard>
+
+<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true">
     <Columns>
         <PropertyColumn Property="song => song.Title" />
         <PropertyColumn Property="song => song.Artist" />
