@@ -11,8 +11,10 @@ public static class ServiceConfiguration
 {
     public static void RegisterServices(this IServiceCollection services)
     {
-        services.AddScoped<IFileProcessingService, FileProcessingService>();
-        services.AddTransient<ISongService, SongService>();
+        services.AddSingleton<IFileProcessingService, FileProcessingService>();
+        services.AddSingleton<ISongService, SongService>();
+        services.AddSingleton<IMixingTechnique, SmoothMixingTechnique>();
+        services.AddSingleton<IMixingService, MixingService>();
     }
 
     public static void RegisterDatabase(this IServiceCollection services)
@@ -24,6 +26,6 @@ public static class ServiceConfiguration
 
     public static void RegisterRepositories(this IServiceCollection services)
     {
-       services.AddScoped<ISongRepository, SongRepository>();
+       services.AddSingleton<ISongRepository, SongRepository>();
     }
 }

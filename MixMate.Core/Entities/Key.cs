@@ -31,4 +31,5 @@ public class Key
     }
 
     public string GetFullKey() => Note + Scale.ToString() + Signature.ToString();
+    public string GetFullKeyForDisplay() => Note + " " + Scale.ToString() + " " + Signature.ToString();
 }

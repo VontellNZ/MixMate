@@ -3,7 +3,7 @@ using MixMate.Core.Interfaces;
 
 namespace MixMate.Core.Services;
 
-public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques)
+public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques) : IMixingService
 {
     private readonly IEnumerable<IMixingTechnique> _mixingTechniques = mixingTechniques;
 
@@ -15,7 +15,7 @@ public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques)
             var technique = GetMixingTechniqueByName(techniqueName);
             suggestedSongs = technique.GetSuggestedSongs(mainSong, songs);
         }
-        catch (ArgumentException ex) 
+        catch (ArgumentException ex)
         {
             Console.WriteLine(ex.ToString()); //TODO: Logging
         }
