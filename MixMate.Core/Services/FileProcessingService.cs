@@ -16,10 +16,10 @@ public class FileProcessingService(ISongService songService) : IFileProcessingSe
     private string[] _columns = [];
     private Dictionary<string, int> _fields = [];
 
-    //File upload result return type
-    public async Task<List<Song>> LoadSongsFromFiles(InputFileChangeEventArgs e)
+    public async Task<FileLoadResult> LoadSongsFromFiles(InputFileChangeEventArgs e)
     {
         var songs = new List<Song>();
+        var errors = new List<string>();
 
         foreach (var file in e.GetMultipleFiles(MaxAllowedFiles))
         {
@@ -28,23 +28,23 @@ public class FileProcessingService(ISongService songService) : IFileProcessingSe
                 var extension = Path.GetExtension(file.Name);
                 if (!extension.Equals(AllowedFileExtension))
                 {
-                    //Errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
+                    //logging
+                    errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
                     continue;
                 }
 
-                songs.AddRange(await ConvertFileLinesToSongsAsync(file));
-
-                await _songService.AddSongsAsync(songs);
+                var processedSongs = await ConvertFileLinesToSongsAsync(file);
+                await _songService.AddSongsAsync(processedSongs);
+                songs.AddRange(processedSongs);
             }
             catch (Exception ex)
             {
                 //Logging
-                //Errors.Add($"File: {file.Name}, Error: {ex.Message}");
-                throw;
+                errors.Add($"Error occurred during file processing. File: {file.Name}, Error: {ex.Message}");
             }
         }
 
-        return songs;
+        return new FileLoadResult(songs, errors);
     }
 
     public async Task<List<Song>> ConvertFileLinesToSongsAsync(IBrowserFile file)

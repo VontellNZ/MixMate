@@ -22,7 +22,7 @@ public partial class Home
     protected override async Task OnInitializedAsync()
     {
         var songs = await SongService.GetAllSongsAsync();
-        this._songs = new ObservableCollection<Song>(songs);
+        _songs = new ObservableCollection<Song>(songs);
 
         await base.OnInitializedAsync();
     }
@@ -37,11 +37,13 @@ public partial class Home
             return;
         }
 
-        var songs = await FileProcessingService.LoadSongsFromFiles(e);
-        foreach (var song in songs)
+        var fileLoadResult = await FileProcessingService.LoadSongsFromFiles(e);
+        foreach (var song in fileLoadResult.Songs)
         {
-            this._songs.Add(song);
+            _songs.Add(song);
         }
+
+        Errors.AddRange(fileLoadResult.Errors);
     }
 
     private void SetMainSong(DataGridRowClickEventArgs<Song> selectedSong) 
