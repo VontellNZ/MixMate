@@ -17,40 +17,35 @@
     </ul>
 }
 
-@if (!_songs.Any())
-{
-    <InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
-}
-else
-{
-    <MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
-    
-    <MudCard class="p-1 m-1">
-        <MudCardContent>
-            @if (_mainSong == null)
-            {
-                <MudText>
-                    Select a song from below to start mixing!
-                </MudText>
-            }
-            else
-            {
-                <MudText>
-                    Main Song: @_mainSong?.Title - @_mainSong?.Artist
-                </MudText>
-            }          
-        </MudCardContent>
-    </MudCard>
+<InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
 
-    <MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true">
-        <Columns>
-            <PropertyColumn Property="song => song.Title" />
-            <PropertyColumn Property="song => song.Artist" />
-            <PropertyColumn Property="song => song.Album" />
-            <PropertyColumn Property="song => song.Genre" />
-            <PropertyColumn Property="song => song.Bpm" />
-            <PropertyColumn Property="song => song.Duration" />
-            <PropertyColumn Property="song => song.Key.GetFullKey()" />
-        </Columns>
-    </MudDataGrid>
-}
+<MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
+    
+<MudCard class="p-1 m-1">
+    <MudCardContent>
+        @if (_mainSong == null)
+        {
+            <MudText>
+                Select a song from below to start mixing!
+            </MudText>
+        }
+        else
+        {
+            <MudText>
+                Main Song: @_mainSong?.Title - @_mainSong?.Artist
+            </MudText>
+        }          
+    </MudCardContent>
+</MudCard>
+
+<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true">
+    <Columns>
+        <PropertyColumn Property="song => song.Title" />
+        <PropertyColumn Property="song => song.Artist" />
+        <PropertyColumn Property="song => song.Album" />
+        <PropertyColumn Property="song => song.Genre" />
+        <PropertyColumn Property="song => song.Bpm" />
+        <PropertyColumn Property="song => song.Duration" />
+        <PropertyColumn Property="song => song.Key.GetFullKey()" />
+    </Columns>
+</MudDataGrid>
