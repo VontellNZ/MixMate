@@ -6,5 +6,6 @@ namespace MixMate.Core.Interfaces
     public interface IFileProcessingService
     {
         Task<List<Song>> ConvertFileLinesToSongsAsync(IBrowserFile file);
+        Task<List<Song>> LoadSongsFromFiles(InputFileChangeEventArgs e);
     }
 }
