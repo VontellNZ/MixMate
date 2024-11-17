@@ -31,5 +31,6 @@ public class Key
     }
 
     public string GetFullKey() => Note + Scale.ToString() + Signature.ToString();
-    public string GetFullKeyForDisplay() => Note + " " + Scale.ToString() + " " + Signature.ToString();
+    public string GetFullKeyForDisplay() 
+        => $"{Note} {(Signature != Signature.None ? Signature.ToString() : string.Empty)} {Scale}";
 }

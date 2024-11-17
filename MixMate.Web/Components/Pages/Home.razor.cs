@@ -6,7 +6,6 @@ using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
 using MudBlazor;
 using System.Collections.ObjectModel;
-using static MudBlazor.CategoryTypes;
 
 namespace MixMate.Web.Components.Pages;
 
@@ -68,9 +67,13 @@ public partial class Home
         _suggestedSongs = MixingService.GetSuggestedSongs("SmoothMixingTechnique", (Song)MainSong, _songs.ToList());
     }
 
-    private string RowStyleFunc(Song arg1, int index)
+    private string RowStyleFunc(Song rowSong, int index)
     {
-        if (_suggestedSongs.Contains(arg1))
+        if (rowSong.Equals(_mainSong))
+        {
+            return "background-color:PaleGoldenRod";
+        }
+        if (_suggestedSongs.Contains(rowSong))
         {
             return "background-color:LightGreen";
         }
