@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Logging;
 using MixMate.Core.Constants;
 using MixMate.Core.Entities;
 using MixMate.Core.Extensions;
@@ -8,11 +9,12 @@ using static MixMate.Core.Constants.TracklistHeaders;
 
 namespace MixMate.Core.Services;
 
-public class FileProcessingService(ISongService songService) : IFileProcessingService
+public class FileProcessingService(ISongService songService, ILogger<FileProcessingService> logger) : IFileProcessingService
 {
     private const int MaxAllowedFiles = 1;
     private const string AllowedFileExtension = ".txt";
     private readonly ISongService _songService = songService;
+    private readonly ILogger<FileProcessingService> _logger = logger;
     private string[] _columns = [];
     private Dictionary<string, int> _fields = [];
 
@@ -28,7 +30,7 @@ public class FileProcessingService(ISongService songService) : IFileProcessingSe
                 var extension = Path.GetExtension(file.Name);
                 if (!extension.Equals(AllowedFileExtension))
                 {
-                    //logging
+                    _logger.LogWarning("Error: Attempting to upload a {Extension} file but only .txt files are allowed", extension);
                     errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
                     continue;
                 }
@@ -39,8 +41,8 @@ public class FileProcessingService(ISongService songService) : IFileProcessingSe
             }
             catch (Exception ex)
             {
-                //Logging
-                errors.Add($"Error occurred during file processing. File: {file.Name}, Error: {ex.Message}");
+                _logger.LogError(ex, "Error occurred while processing file {FileName}", file.Name);
+                errors.Add($"Error occurred while processing file {file.Name}");
             }
         }
 

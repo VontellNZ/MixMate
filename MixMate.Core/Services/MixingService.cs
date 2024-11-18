@@ -1,15 +1,18 @@
-﻿using MixMate.Core.Entities;
+﻿using Microsoft.Extensions.Logging;
+using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
 
 namespace MixMate.Core.Services;
 
-public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques) : IMixingService
+public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques, ILogger<MixingService> logger) : IMixingService
 {
     private readonly IEnumerable<IMixingTechnique> _mixingTechniques = mixingTechniques;
+    private readonly ILogger<MixingService> _logger = logger;
 
     public List<Song> GetSuggestedSongs(string techniqueName, Song mainSong, List<Song> songs)
     {
         var suggestedSongs = new List<Song>();
+
         try
         {
             var technique = GetMixingTechniqueByName(techniqueName);
@@ -17,8 +20,13 @@ public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques) : IMi
         }
         catch (ArgumentException ex)
         {
-            Console.WriteLine(ex.ToString()); //TODO: Logging
+            _logger.LogError(
+                ex,
+                "Error while getting suggested songs for {Song} using {MixingTechnique} mixing technique",
+                mainSong.Title,
+                techniqueName);
         }
+
         return suggestedSongs;
     }
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
 using MixMate.DataAccess.Exceptions;
@@ -6,9 +7,10 @@ using System.Data;
 
 namespace MixMate.DataAccess.Repositories;
 
-public class SongRepository(IDatabaseContext dbContext) : ISongRepository
+public class SongRepository(IDatabaseContext dbContext, ILogger<SongRepository> logger) : ISongRepository
 {
     private readonly IDatabaseContext _dbContext = dbContext;
+    private readonly ILogger<SongRepository> _logger = logger;
 
     public async Task<IEnumerable<Song>> GetAllSongsAsync()
     {
@@ -19,6 +21,7 @@ public class SongRepository(IDatabaseContext dbContext) : ISongRepository
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "An error occurred while retrieving all songs from the database");
             throw new SongRepositoryException("An error occurred while retrieving all songs from the database", ex);
         }
     }
@@ -49,8 +52,8 @@ public class SongRepository(IDatabaseContext dbContext) : ISongRepository
             }
             catch (Exception ex)
             {
-                //logging
-                throw new SongRepositoryException($"An error occurred while adding the song with title {song.Title}.", ex);
+                _logger.LogError(ex, "An error occurred while adding the song {Title} by {Artist} to the database", song.Title, song.Artist);
+                throw new SongRepositoryException($"An error occurred while adding the song {song.Title} by {song.Artist} to the database", ex);
             }
         }
     }

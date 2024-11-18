@@ -1,14 +1,16 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MixMate.Core.Interfaces;
 using System.Data;
 
 namespace MixMate.DataAccess.Database;
 
-public class DatabaseContext(IConfiguration configuration) : IDatabaseContext
+public class DatabaseContext(IConfiguration configuration, ILogger<DatabaseContext> logger) : IDatabaseContext
 {
     private readonly IConfiguration _configuration = configuration;
+    private readonly ILogger<DatabaseContext> _logger = logger;
 
     public IDbConnection CreateConnection() => new SqliteConnection(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -42,7 +44,7 @@ public class DatabaseContext(IConfiguration configuration) : IDatabaseContext
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred while initializing the database: {ex.Message}"); //logging
+            _logger.LogError(ex, "An error occurred while initializing the database");
             throw;
         }
     }
