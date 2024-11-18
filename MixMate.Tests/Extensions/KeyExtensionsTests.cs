@@ -83,10 +83,12 @@ public class KeyExtensionsTests
     [InlineData("Am", null)]
     [InlineData("A#m", typeof(KeyNotFoundException))]
     [InlineData("A##", typeof(FormatException))]
-    public void GetKeyFromString_ShouldThrowExceptions_ForInvalidStrings(string value, Type expectedExceptionType)
+    public void GetKeyFromString_ShouldThrowExceptions_ForInvalidStrings(string? value, Type? expectedExceptionType)
     {
         // Act
+#pragma warning disable CS8604 // Possible null reference argument.
         Action act = () => value.GetKeyFromString();
+#pragma warning restore CS8604 // Possible null reference argument.
 
         // Assert
         if (expectedExceptionType != null)
