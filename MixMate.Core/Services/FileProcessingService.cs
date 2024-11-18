@@ -30,8 +30,8 @@ public class FileProcessingService(ISongService songService, ILogger<FileProcess
                 var extension = Path.GetExtension(file.Name);
                 if (!extension.Equals(AllowedFileExtension))
                 {
-                    _logger.LogWarning("Error: Attempting to upload a {Extension} file but only .txt files are allowed", extension);
-                    errors.Add($"Error: Attempting to upload a {extension} file but only .txt files are allowed");
+                    _logger.LogWarning("Attempting to upload a {Extension} file but only .txt files are allowed", extension);
+                    errors.Add($"Attempting to upload a {extension} file but only .txt files are allowed");
                     continue;
                 }
 
