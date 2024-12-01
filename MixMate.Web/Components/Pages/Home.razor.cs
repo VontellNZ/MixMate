@@ -23,6 +23,7 @@ public partial class Home
     [Inject] private IFileProcessingService FileProcessingService { get; set; }
     [Inject] private ISongService SongService { get; set; }
     [Inject] private IMixingService MixingService { get; set; }
+    [Inject] private ILogger<Home> Logger { get; set; }
 
     private const int _maxAllowedFiles = 1;
     private readonly List<string> Errors = [];
@@ -44,6 +45,7 @@ public partial class Home
 
         if (e.FileCount > _maxAllowedFiles)
         {
+            Logger.LogWarning("Attempting to upload {FileCount} files, but only {MaxFiles} files are allowed", e.FileCount, _maxAllowedFiles);
             Errors.Add($"Error: Attempting to upload {e.FileCount} files, but only {_maxAllowedFiles} files are allowed.");
             return;
         }
