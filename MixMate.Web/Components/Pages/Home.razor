@@ -2,6 +2,8 @@
 @using MixMate.Core.Entities
 @rendermode InteractiveServer
 
+<MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
+
 <PageTitle>Mix Mate</PageTitle>
 
 <h1>Mix Mate</h1>
@@ -18,8 +20,6 @@
 }
 
 <InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
-
-<MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
     
 <MudCard class="p-1 m-1">
     <MudCardContent>
