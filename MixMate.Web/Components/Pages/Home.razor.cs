@@ -21,16 +21,25 @@ public partial class Home
         set
         {
             _mainSong = value;
-            GetSuggestedSongs();
+            GetSuggestedSongs(SelectedMixingTechnique);
         }
     }
     private string MainSongCardText
     {
         get
         {
-            if (_mainSong == null) return "Select a song from below to start mixing!";
+            if (MainSong == null) return "Select a song from below to start mixing!";
 
-            return $"Main Song: {_mainSong?.Title} - {MainSong?.Artist}";
+            return $"Main Song: {MainSong?.Title} - {MainSong?.Artist}";
+        }
+    }
+    private string SelectedMixingTechnique
+    {
+        get => _selectedMixingTechnique;
+        set
+        {
+            _selectedMixingTechnique = value;
+            GetSuggestedSongs(value);
         }
     }
 
@@ -49,7 +58,7 @@ public partial class Home
 
         _availableMixingTechniqueNames.Clear();
         _availableMixingTechniqueNames = MixingService.GetAvailableMixingTechniqueNames();
-        _selectedMixingTechnique = _availableMixingTechniqueNames.FirstOrDefault();
+        SelectedMixingTechnique = _availableMixingTechniqueNames.FirstOrDefault();
 
         await base.OnInitializedAsync();
     }
@@ -77,11 +86,11 @@ public partial class Home
     private void SetMainSong(DataGridRowClickEventArgs<Song> selectedSong) 
         => MainSong = selectedSong.Item;
 
-    private void GetSuggestedSongs()
+    private void GetSuggestedSongs(string mixingTechniqueName)
     {
         if (MainSong == null) return;
 
-        _suggestedSongs = MixingService.GetSuggestedSongs("SmoothMixingTechnique", (Song)MainSong, _songs.ToList());
+        _suggestedSongs = MixingService.GetSuggestedSongs(mixingTechniqueName, (Song)MainSong, _songs.ToList());
     }
 
     private string RowStyleFunc(Song rowSong, int index)

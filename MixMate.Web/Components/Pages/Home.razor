@@ -30,7 +30,7 @@
                 </MudText>
             </MudItem>
             <MudItem xs="3">
-                <MudSelect @bind-Value="_selectedMixingTechnique" Variant="Variant.Outlined" >
+                <MudSelect @bind-Value="SelectedMixingTechnique" Variant="Variant.Outlined">
                     @foreach (string technique in _availableMixingTechniqueNames)
                     {
                         <MudSelectItem Value="@technique" />
