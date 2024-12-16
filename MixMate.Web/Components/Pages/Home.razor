@@ -24,22 +24,11 @@
 <MudCard Class="p-1 m-1">
     <MudCardContent>
         <MudGrid Justify="Justify.SpaceBetween">
-            @if (MainSong == null)
-            {
-                <MudItem>
-                    <MudText>
-                        Select a song from below to start mixing!
-                    </MudText>
-                </MudItem>
-            }
-            else
-            {
-                <MudItem>
-                    <MudText>
-                        Main Song: @MainSong?.Title - @MainSong?.Artist
-                    </MudText>
-                </MudItem>
-            }
+            <MudItem>
+                <MudText>
+                    @MainSongCardText
+                </MudText>
+            </MudItem>
             <MudItem >
                 <MudSelect T="string" Placeholder="Mixing techniques">
                     <MudSelectItem T="string">Smooth</MudSelectItem>

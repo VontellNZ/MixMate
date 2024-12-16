@@ -11,7 +11,7 @@ namespace MixMate.Web.Components.Pages;
 
 public partial class Home
 {
-    public Song? MainSong
+    private Song? MainSong
     {
         get => _mainSong;
         set
@@ -24,6 +24,15 @@ public partial class Home
     [Inject] private ISongService SongService { get; set; }
     [Inject] private IMixingService MixingService { get; set; }
     [Inject] private ILogger<Home> Logger { get; set; }
+    private string MainSongCardText
+    {
+        get
+        {
+            if (_mainSong == null) return "Select a song from below to start mixing!";
+
+            return $"Main Song: {_mainSong?.Title} - {MainSong?.Artist}";
+        }
+    }
 
     private const int _maxAllowedFiles = 1;
     private readonly List<string> Errors = [];
