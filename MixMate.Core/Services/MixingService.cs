@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace MixMate.Core.Services;
 
@@ -30,8 +31,19 @@ public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques, ILogg
         return suggestedSongs;
     }
 
+    public List<string> GetAvailableMixingTechniqueNames()
+    {
+        return _mixingTechniques.Select(technique =>
+        {
+            var name = technique.GetType().Name;
+            name = Regex.Replace(name, @"([a-z])([A-Z])", "$1 $2");
+            return name;
+        }).ToList();
+    }
+
     private IMixingTechnique GetMixingTechniqueByName(string techniqueName)
     {
+        techniqueName = Regex.Replace(techniqueName, @"\s+", ""); //Remove whitespace from technique name
         foreach (var technique in _mixingTechniques)
         {
             if (technique.GetType().Name.Equals(techniqueName, StringComparison.OrdinalIgnoreCase))

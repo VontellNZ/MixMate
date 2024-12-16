@@ -10,43 +10,67 @@ using System.Collections.ObjectModel;
 namespace MixMate.Web.Components.Pages;
 
 public partial class Home
-{
-    public Song? MainSong
+{    
+    [Inject] private IFileProcessingService FileProcessingService { get; set; }
+    [Inject] private ISongService SongService { get; set; }
+    [Inject] private IMixingService MixingService { get; set; }
+    [Inject] private ILogger<Home> Logger { get; set; }
+    private Song? MainSong
     {
         get => _mainSong;
         set
         {
             _mainSong = value;
-            GetSuggestedSongs();
+            GetSuggestedSongs(SelectedMixingTechnique);
         }
     }
-    [Inject] private IFileProcessingService FileProcessingService { get; set; }
-    [Inject] private ISongService SongService { get; set; }
-    [Inject] private IMixingService MixingService { get; set; }
-    [Inject] private ILogger<Home> Logger { get; set; }
+    private string MainSongCardText
+    {
+        get
+        {
+            if (MainSong == null) return "Select a song from below to start mixing!";
+
+            return $"Main Song: {MainSong?.Title} - {MainSong?.Artist}";
+        }
+    }
+    private string SelectedMixingTechnique
+    {
+        get => _selectedMixingTechnique;
+        set
+        {
+            _selectedMixingTechnique = value;
+            GetSuggestedSongs(value);
+        }
+    }
 
     private const int _maxAllowedFiles = 1;
-    private readonly List<string> Errors = [];
+    private readonly List<string> _errors = [];
+    private List<string> _availableMixingTechniqueNames = [];
     private ObservableCollection<Song> _songs = [];
     private List<Song> _suggestedSongs = [];
     private Song? _mainSong;
+    private string _selectedMixingTechnique;
 
     protected override async Task OnInitializedAsync()
     {
         var songs = await SongService.GetAllSongsAsync();
         _songs = new ObservableCollection<Song>(songs);
 
+        _availableMixingTechniqueNames.Clear();
+        _availableMixingTechniqueNames = MixingService.GetAvailableMixingTechniqueNames();
+        SelectedMixingTechnique = _availableMixingTechniqueNames.FirstOrDefault();
+
         await base.OnInitializedAsync();
     }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
-        Errors.Clear();
+        _errors.Clear();
 
         if (e.FileCount > _maxAllowedFiles)
         {
             Logger.LogWarning("Attempting to upload {FileCount} files, but only {MaxFiles} files are allowed", e.FileCount, _maxAllowedFiles);
-            Errors.Add($"Error: Attempting to upload {e.FileCount} files, but only {_maxAllowedFiles} files are allowed.");
+            _errors.Add($"Error: Attempting to upload {e.FileCount} files, but only {_maxAllowedFiles} files are allowed.");
             return;
         }
 
@@ -56,17 +80,17 @@ public partial class Home
             _songs.Add(song);
         }
 
-        Errors.AddRange(fileLoadResult.Errors);
+        _errors.AddRange(fileLoadResult.Errors);
     }
 
     private void SetMainSong(DataGridRowClickEventArgs<Song> selectedSong) 
         => MainSong = selectedSong.Item;
 
-    private void GetSuggestedSongs()
+    private void GetSuggestedSongs(string mixingTechniqueName)
     {
         if (MainSong == null) return;
 
-        _suggestedSongs = MixingService.GetSuggestedSongs("SmoothMixingTechnique", (Song)MainSong, _songs.ToList());
+        _suggestedSongs = MixingService.GetSuggestedSongs(mixingTechniqueName, (Song)MainSong, _songs.ToList());
     }
 
     private string RowStyleFunc(Song rowSong, int index)

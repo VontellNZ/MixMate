@@ -2,43 +2,46 @@
 @using MixMate.Core.Entities
 @rendermode InteractiveServer
 
+<MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
+
 <PageTitle>Mix Mate</PageTitle>
 
 <h1>Mix Mate</h1>
 
-@if (Errors.Count > 0)
+@if (_errors.Count > 0)
 {
     <h2>Error</h2>
     <ul class="=text-danger">
-        @foreach (var error in Errors)
+        @foreach (var error in _errors)
         {
             <li>@error</li>
         }
     </ul>
 }
 
-<InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
-
-<MudPopoverProvider /> @* For whatever reason this wasn't being picked up properly in MainLayout.razor so its here instead *@
+<InputFile class="form-control p-1 m-2" OnChange="@LoadFiles" multiple accept=".txt" />
     
-<MudCard class="p-1 m-1">
+<MudCard Class="m-2">
     <MudCardContent>
-        @if (MainSong == null)
-        {
-            <MudText>
-                Select a song from below to start mixing!
-            </MudText>
-        }
-        else
-        {
-            <MudText>
-                Main Song: @MainSong?.Title - @MainSong?.Artist
-            </MudText>
-        }          
+        <MudGrid Justify="Justify.SpaceBetween" Style="align-items: center">
+            <MudItem>
+                <MudText Typo="Typo.subtitle1">
+                    @MainSongCardText
+                </MudText>
+            </MudItem>
+            <MudItem xs="3">
+                <MudSelect @bind-Value="SelectedMixingTechnique" Variant="Variant.Outlined">
+                    @foreach (string technique in _availableMixingTechniqueNames)
+                    {
+                        <MudSelectItem Value="@technique" />
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>
 
-<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true" RowStyleFunc="@RowStyleFunc">
+<MudDataGrid class="p-1 m-2" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true" RowStyleFunc="@RowStyleFunc">
     <Columns>
         <PropertyColumn Property="song => song.Title"/>
         <PropertyColumn Property="song => song.Artist" />

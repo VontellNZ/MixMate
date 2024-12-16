@@ -14,6 +14,7 @@ public static class ServiceConfiguration
         services.AddSingleton<IFileProcessingService, FileProcessingService>();
         services.AddSingleton<ISongService, SongService>();
         services.AddSingleton<IMixingTechnique, SmoothMixingTechnique>();
+        services.AddSingleton<IMixingTechnique, EnergyBoostMixingTechnique>();
         services.AddSingleton<IMixingService, MixingService>();
     }
 
