@@ -21,20 +21,32 @@
 
 <InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
     
-<MudCard class="p-1 m-1">
+<MudCard Class="p-1 m-1">
     <MudCardContent>
-        @if (MainSong == null)
-        {
-            <MudText>
-                Select a song from below to start mixing!
-            </MudText>
-        }
-        else
-        {
-            <MudText>
-                Main Song: @MainSong?.Title - @MainSong?.Artist
-            </MudText>
-        }          
+        <MudGrid Justify="Justify.SpaceBetween">
+            @if (MainSong == null)
+            {
+                <MudItem>
+                    <MudText>
+                        Select a song from below to start mixing!
+                    </MudText>
+                </MudItem>
+            }
+            else
+            {
+                <MudItem>
+                    <MudText>
+                        Main Song: @MainSong?.Title - @MainSong?.Artist
+                    </MudText>
+                </MudItem>
+            }
+            <MudItem >
+                <MudSelect T="string" Placeholder="Mixing techniques">
+                    <MudSelectItem T="string">Smooth</MudSelectItem>
+                    <MudSelectItem T="string">Energy boost</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
     </MudCardContent>
 </MudCard>
 
