@@ -19,21 +19,21 @@
     </ul>
 }
 
-<InputFile class="form-control p-1 m-1" OnChange="@LoadFiles" multiple accept=".txt" />
+<InputFile class="form-control p-1 m-2" OnChange="@LoadFiles" multiple accept=".txt" />
     
-<MudCard Class="p-1 m-1">
+<MudCard Class="m-2">
     <MudCardContent>
-        <MudGrid Justify="Justify.SpaceBetween">
+        <MudGrid Justify="Justify.SpaceBetween" Style="align-items: center">
             <MudItem>
-                <MudText>
+                <MudText Typo="Typo.subtitle1">
                     @MainSongCardText
                 </MudText>
             </MudItem>
-            <MudItem >
-                <MudSelect @bind-Value="_selectedMixingTechnique" Placeholder="Mixing techniques">
+            <MudItem xs="3">
+                <MudSelect @bind-Value="_selectedMixingTechnique" Variant="Variant.Outlined" >
                     @foreach (string technique in _availableMixingTechniqueNames)
                     {
-                        <MudSelectItem Value="@technique">@technique</MudSelectItem>
+                        <MudSelectItem Value="@technique" />
                     }
                 </MudSelect>
             </MudItem>
@@ -41,7 +41,7 @@
     </MudCardContent>
 </MudCard>
 
-<MudDataGrid class="p-1 m-1" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true" RowStyleFunc="@RowStyleFunc">
+<MudDataGrid class="p-1 m-2" Items="_songs" T="Song" RowClick="@SetMainSong" Hover="true" RowStyleFunc="@RowStyleFunc">
     <Columns>
         <PropertyColumn Property="song => song.Title"/>
         <PropertyColumn Property="song => song.Artist" />

@@ -48,7 +48,8 @@ public partial class Home
         _songs = new ObservableCollection<Song>(songs);
 
         _availableMixingTechniqueNames.Clear();
-        _availableMixingTechniqueNames = MixingService.AvailableMixingTechniqueNames;
+        _availableMixingTechniqueNames = MixingService.GetAvailableMixingTechniqueNames();
+        _selectedMixingTechnique = _availableMixingTechniqueNames.FirstOrDefault();
 
         await base.OnInitializedAsync();
     }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace MixMate.Core.Services;
 
 public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques, ILogger<MixingService> logger) : IMixingService
 {
-    public List<string> AvailableMixingTechniqueNames => _mixingTechniques.Select(technique => technique.GetType().Name).ToList();
     private readonly IEnumerable<IMixingTechnique> _mixingTechniques = mixingTechniques;
     private readonly ILogger<MixingService> _logger = logger;
 
@@ -29,6 +29,16 @@ public class MixingService(IEnumerable<IMixingTechnique> mixingTechniques, ILogg
         }
 
         return suggestedSongs;
+    }
+
+    public List<string> GetAvailableMixingTechniqueNames()
+    {
+        return _mixingTechniques.Select(technique =>
+        {
+            var name = technique.GetType().Name;
+            var foo = Regex.Replace(name, @"([a-z])([A-Z])", "$1 $2");
+            return foo;
+        }).ToList();
     }
 
     private IMixingTechnique GetMixingTechniqueByName(string techniqueName)
