@@ -8,11 +8,11 @@
 
 <h1>Mix Mate</h1>
 
-@if (Errors.Count > 0)
+@if (_errors.Count > 0)
 {
     <h2>Error</h2>
     <ul class="=text-danger">
-        @foreach (var error in Errors)
+        @foreach (var error in _errors)
         {
             <li>@error</li>
         }
@@ -30,9 +30,11 @@
                 </MudText>
             </MudItem>
             <MudItem >
-                <MudSelect T="string" Placeholder="Mixing techniques">
-                    <MudSelectItem T="string">Smooth</MudSelectItem>
-                    <MudSelectItem T="string">Energy boost</MudSelectItem>
+                <MudSelect @bind-Value="_selectedMixingTechnique" Placeholder="Mixing techniques">
+                    @foreach (string technique in _availableMixingTechniqueNames)
+                    {
+                        <MudSelectItem Value="@technique">@technique</MudSelectItem>
+                    }
                 </MudSelect>
             </MudItem>
         </MudGrid>
