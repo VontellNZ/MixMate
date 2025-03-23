@@ -1,0 +1,54 @@
+schema {
+  query: Query
+}
+
+type Query {
+  allSongs: [Song!]!
+}
+
+type Song {
+  id: Int!
+  title: String!
+  artist: String!
+  album: String
+  genre: String
+  bpm: Float!
+  duration: TimeSpan!
+  key: Key!
+  dateAdded: DateTime!
+}
+
+"The `TimeSpan` scalar represents an ISO-8601 compliant duration type."
+scalar TimeSpan
+
+type Key {
+  fullKey: String!
+  fullKeyForDisplay: String!
+  note: String!
+  scale: Scale!
+  signature: Signature!
+  camelotScale: CamelotScale!
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime
+
+type CamelotScale {
+  number: Int!
+  letter: String!
+}
+
+enum Signature {
+  NONE
+  SHARP
+  FLAT
+  NATURAL
+}
+
+enum Scale {
+  MAJOR
+  MINOR
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION

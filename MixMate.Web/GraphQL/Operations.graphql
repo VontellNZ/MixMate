@@ -1,0 +1,23 @@
+﻿query GetAllSongs {
+  allSongs {
+    id
+    title
+    artist
+    album
+    genre
+    bpm
+    duration
+    key {
+      note
+      scale
+      signature
+      camelotScale {
+        number
+        letter
+      }
+      fullKey
+      fullKeyForDisplay
+    }
+    dateAdded
+  }
+}
