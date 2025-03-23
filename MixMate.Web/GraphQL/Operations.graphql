@@ -21,3 +21,11 @@
     dateAdded
   }
 }
+
+mutation AddSongs($songs: [SongInput!]!) {
+  addSongs(songs: $songs) {
+    success
+    message
+    songsAdded
+  }
+}

@@ -19,7 +19,8 @@ builder.Services.RegisterRepositories();
 // Configure GQL
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>();
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>();
 
 var app = builder.Build();
 
@@ -29,19 +30,6 @@ var app = builder.Build();
     var context = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
     await context.Initialize();
 }
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
 
 app.MapGraphQL();
 

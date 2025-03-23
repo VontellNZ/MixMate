@@ -12,8 +12,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 //Dependency injection
-builder.Services.RegisterDatabase();
-builder.Services.RegisterRepositories();
 builder.Services.RegisterServices();
 builder.Services
     .AddMixMateGraphQLClient()

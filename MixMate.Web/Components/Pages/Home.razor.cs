@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using MixMate.Core.Entities;
 using MixMate.Core.Interfaces;
+using MixMate.Web.Interfaces;
 using MudBlazor;
 using System.Collections.ObjectModel;
 
@@ -12,7 +13,7 @@ namespace MixMate.Web.Components.Pages;
 public partial class Home
 {    
     [Inject] private IFileProcessingService FileProcessingService { get; set; }
-    [Inject] private ISongService SongService { get; set; }
+    [Inject] private IMixMateClient MixMateClient { get; set; }
     [Inject] private IMixingService MixingService { get; set; }
     [Inject] private ILogger<Home> Logger { get; set; }
     private Song? MainSong
@@ -53,7 +54,7 @@ public partial class Home
 
     protected override async Task OnInitializedAsync()
     {
-        var songs = await SongService.GetAllSongsAsync();
+        var songs = await MixMateClient.GetAllSongsAsync();
         _songs = new ObservableCollection<Song>(songs);
 
         _availableMixingTechniqueNames.Clear();
@@ -75,6 +76,8 @@ public partial class Home
         }
 
         var fileLoadResult = await FileProcessingService.LoadSongsFromFiles(e);
+        await MixMateClient.AddSongsAsync(fileLoadResult.Songs);
+
         foreach (var song in fileLoadResult.Songs)
         {
             _songs.Add(song);
