@@ -5,5 +5,5 @@ namespace MixMate.API.GraphQL;
 
 public class Query
 {
-    public async Task<IEnumerable<Song>> GetSongs([Service] ISongService songService) => await songService.GetAllSongsAsync();
+    public async Task<IEnumerable<Song>> GetAllSongs([Service] ISongService songService) => await songService.GetAllSongsAsync();
 }

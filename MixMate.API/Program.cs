@@ -1,6 +1,6 @@
 using MixMate.API.GraphQL;
 using MixMate.Core.Interfaces;
-using MixMate.Web;
+using MixMate.API;
 
 var builder = WebApplication.CreateBuilder(args);
 

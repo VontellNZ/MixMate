@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MixMate.Core\MixMate.Core.csproj" />
-    <ProjectReference Include="..\MixMate.Web\MixMate.Web.csproj" />
+    <ProjectReference Include="..\MixMate.DataAccess\MixMate.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

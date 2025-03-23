@@ -1,5 +1,3 @@
-using MixMate.Core.Interfaces;
-using MixMate.Web;
 using MixMate.Web.Components;
 using MudBlazor.Services;
 
@@ -11,18 +9,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 //Dependency injection
-builder.Services.RegisterDatabase();
-builder.Services.RegisterServices();
-builder.Services.RegisterRepositories();
 
 var app = builder.Build();
-
-// Ensure database and tables exist
-{
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<IDatabaseContext>();
-    await context.Initialize();
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

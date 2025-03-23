@@ -5,7 +5,7 @@ using MixMate.DataAccess.Database;
 using MixMate.DataAccess.Repositories;
 using MixMate.DataAccess.SqlHandlers;
 
-namespace MixMate.Web;
+namespace MixMate.API;
 
 public static class ServiceConfiguration
 {
