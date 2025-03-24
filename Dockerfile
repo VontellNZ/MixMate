@@ -1,0 +1,5 @@
+FROM postgres:latest
+ENV POSTGRES_DB=mixmate
+ENV POSTGRES_USER=mixmateuser
+ENV POSTGRES_PASSWORD=yourpassword
+EXPOSE 5432
