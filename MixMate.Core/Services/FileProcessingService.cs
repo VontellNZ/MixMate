@@ -9,11 +9,10 @@ using static MixMate.Core.Constants.TracklistHeaders;
 
 namespace MixMate.Core.Services;
 
-public class FileProcessingService(ISongService songService, ILogger<FileProcessingService> logger) : IFileProcessingService
+public class FileProcessingService(ILogger<FileProcessingService> logger) : IFileProcessingService
 {
     private const int MaxAllowedFiles = 1;
     private const string AllowedFileExtension = ".txt";
-    private readonly ISongService _songService = songService;
     private readonly ILogger<FileProcessingService> _logger = logger;
     private string[] _columns = [];
     private Dictionary<string, int> _fields = [];
@@ -36,7 +35,6 @@ public class FileProcessingService(ISongService songService, ILogger<FileProcess
                 }
 
                 var processedSongs = await ConvertFileLinesToSongsAsync(file);
-                await _songService.AddSongsAsync(processedSongs);
                 songs.AddRange(processedSongs);
             }
             catch (Exception ex)

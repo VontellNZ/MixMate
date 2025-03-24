@@ -1,12 +1,18 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using MixMate.Core.Entities;
 using MixMate.Core.Enums;
 using MixMate.Core.Services;
+using Moq;
 
 namespace MixMate.Core.Tests.Services;
 
 public class MixingServiceTests
 {
+    private readonly ILogger<MixingService> _logger;
+
+    public MixingServiceTests() => _logger = new Mock<ILogger<MixingService>>().Object;
+
     [Fact]
     public void GivenSmoothMixing_GetSuggestedSongs_ShouldReturnOnlyMatchingSong()
     {
@@ -44,7 +50,7 @@ public class MixingServiceTests
         var songs = new List<Song> { mainSong, harmonicMatch, nonMatch };
 
         var techniqueName = "SmoothMixingTechnique";
-        var mixingService = new MixingService([new SmoothMixingTechnique(), new EnergyBoostMixingTechnique()]);
+        var mixingService = new MixingService([new SmoothMixingTechnique(), new EnergyBoostMixingTechnique()], _logger);
 
         //Act
         var result = mixingService.GetSuggestedSongs(techniqueName, mainSong, songs);
@@ -96,7 +102,7 @@ public class MixingServiceTests
         var songs = new List<Song> { mainSong, harmonicMatch, nonMatch };
 
         var techniqueName = "EnergyBoostMixingTechnique";
-        var mixingService = new MixingService([new SmoothMixingTechnique(), new EnergyBoostMixingTechnique()]);
+        var mixingService = new MixingService([new SmoothMixingTechnique(), new EnergyBoostMixingTechnique()], _logger);
 
         //Act
         var result = mixingService.GetSuggestedSongs(techniqueName, mainSong, songs);

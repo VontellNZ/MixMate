@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <GraphQL Include="GraphQL/**/*.graphql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="8.1.0" />
-    <PackageReference Include="StrawberryShake.Server" Version="15.1.1" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="14.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>

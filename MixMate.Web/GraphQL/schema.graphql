@@ -1,0 +1,79 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  allSongs: [Song!]!
+}
+
+type Mutation {
+  addSongs(songs: [SongInput!]!): AddSongsPayload!
+}
+
+type Song {
+  id: Int!
+  title: String!
+  artist: String!
+  album: String
+  genre: String
+  bpm: Float!
+  duration: TimeSpan!
+  key: Key!
+  dateAdded: DateTime!
+}
+
+"The `TimeSpan` scalar represents an ISO-8601 compliant duration type."
+scalar TimeSpan
+
+type Key {
+  fullKey: String!
+  fullKeyForDisplay: String!
+  note: String!
+  scale: Scale!
+  signature: Signature!
+  camelotScale: CamelotScale!
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime
+
+type CamelotScale {
+  number: Int!
+  letter: String!
+}
+
+enum Signature {
+  NONE
+  SHARP
+  FLAT
+  NATURAL
+}
+
+enum Scale {
+  MAJOR
+  MINOR
+}
+
+input SongInput {
+  title: String!
+  artist: String!
+  album: String
+  genre: String
+  bpm: Float!
+  duration: TimeSpan!
+  key: KeyInput!
+  dateAdded: DateTime
+}
+
+input KeyInput {
+  note: String!
+  scale: String!
+  signature: String!
+}
+
+type AddSongsPayload {
+  success: Boolean!
+  message: String
+  songsAdded: Int
+}
