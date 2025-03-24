@@ -18,6 +18,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixMate.DataAccess", "MixMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixMate.API", "MixMate.API\MixMate.API.csproj", "{BE2EA808-BE53-47DD-8DE1-DA36AB40D945}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{23E05EC2-C5A1-4159-A7EB-4092A1D205B8}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "postgres", "postgres", "{8C4FA905-928B-4184-B64D-434698DB5D3A}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +57,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8C4FA905-928B-4184-B64D-434698DB5D3A} = {23E05EC2-C5A1-4159-A7EB-4092A1D205B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00FEF3B6-E0FD-4265-8010-C808BA0E0FCA}
