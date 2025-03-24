@@ -47,7 +47,7 @@
         <PropertyColumn Property="song => song.Artist" />
         <PropertyColumn Property="song => song.Album" />
         <PropertyColumn Property="song => song.Genre" />
-        <PropertyColumn Property="song => song.Bpm" />
+        <PropertyColumn Property="song => Math.Round(song.Bpm, 2)" />
         <PropertyColumn Property="song => song.Duration" />
         <PropertyColumn Property="song => song.Key.GetFullKeyForDisplay()" />
     </Columns>
