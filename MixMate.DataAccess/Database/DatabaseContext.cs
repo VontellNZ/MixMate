@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MixMate.Core.Interfaces;
+using Npgsql;
 using System.Data;
 
 namespace MixMate.DataAccess.Database;
@@ -12,7 +13,7 @@ public class DatabaseContext(IConfiguration configuration, ILogger<DatabaseConte
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger<DatabaseContext> _logger = logger;
 
-    public IDbConnection CreateConnection() => new SqliteConnection(_configuration.GetConnectionString("DefaultConnection"));
+    public IDbConnection CreateConnection() => new NpgsqlConnection(_configuration.GetConnectionString("PostgresConnection"));
 
     public async Task Initialize()
     {
@@ -27,15 +28,15 @@ public class DatabaseContext(IConfiguration configuration, ILogger<DatabaseConte
                 var sql = @"
                     CREATE TABLE IF NOT EXISTS 
                     Songs (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Id SERIAL PRIMARY KEY,
                         Title TEXT NOT NULL,
                         Artist TEXT NOT NULL,
                         Album TEXT,
                         Genre TEXT,
                         Bpm REAL,
-                        Duration INTEGER, -- Store TimeSpan as ticks
+                        Duration BIGINT, -- Store TimeSpan as ticks
                         Key TEXT NOT NULL,
-                        DateAdded TEXT NOT NULL,
+                        DateAdded TIMESTAMP NOT NULL,
                         UNIQUE (Title, Artist)
                     );";
 
