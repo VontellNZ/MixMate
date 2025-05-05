@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MixMate.Core\MixMate.Core.csproj" />
-    <ProjectReference Include="..\MixMate.DataAccess\MixMate.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
