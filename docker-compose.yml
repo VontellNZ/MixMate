@@ -12,5 +12,16 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
+  api:
+    build:
+      context: .
+      dockerfile: MixMate.API/Dockerfile
+    ports:
+      - "5165:5165"
+    depends_on:
+      - postgres
+    environment:
+      - ConnectionStrings__PostgresConnection=Host=postgres;Port=5432;Database=mixmate;Username=mixmateuser;Password=yourpassword
+
 volumes:
   postgres_data:
