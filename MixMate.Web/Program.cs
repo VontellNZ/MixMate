@@ -17,7 +17,7 @@ builder.Services
     .AddMixMateGraphQLClient()
     .ConfigureHttpClient(client =>
     {
-        client.BaseAddress = new Uri("https://localhost:7081/graphql/");
+        client.BaseAddress = new Uri("http://localhost:5165/graphql/");
     });
 
 builder.Services.AddScoped<IMixMateClient, MixMateClient>();
