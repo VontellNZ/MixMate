@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MixMate.Core\MixMate.Core.csproj" />
+    <ProjectReference Include="..\MixMate.ServiceDefaults\MixMate.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

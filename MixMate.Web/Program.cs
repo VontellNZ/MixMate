@@ -22,6 +22,8 @@ builder.Services
 
 builder.Services.AddScoped<IMixMateClient, MixMateClient>();
 
+builder.AddServiceDefaults();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

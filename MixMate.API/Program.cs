@@ -15,6 +15,8 @@ builder.Services
     .AddQueryType<Query>()
     .AddMutationType<Mutation>();
 
+builder.AddServiceDefaults();
+
 var app = builder.Build();
 
 // Ensure database and tables exist
