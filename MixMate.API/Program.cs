@@ -4,6 +4,10 @@ using MixMate.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
+builder.AddNpgsqlDataSource("mixmate");
+
 //Dependency injection
 builder.Services.RegisterDatabase();
 builder.Services.RegisterServices();
@@ -13,9 +17,9 @@ builder.Services.RegisterRepositories();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
-    .AddMutationType<Mutation>();
-
-builder.AddServiceDefaults();
+    .AddMutationType<Mutation>()
+    .ModifyRequestOptions(o =>
+    o.IncludeExceptionDetails = builder.Environment.IsDevelopment());
 
 var app = builder.Build();
 

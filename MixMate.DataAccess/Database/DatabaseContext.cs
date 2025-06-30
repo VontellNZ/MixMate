@@ -7,12 +7,12 @@ using System.Data;
 
 namespace MixMate.DataAccess.Database;
 
-public class DatabaseContext(IConfiguration configuration, ILogger<DatabaseContext> logger) : IDatabaseContext
+public class DatabaseContext(NpgsqlDataSource dataSource, ILogger<DatabaseContext> logger) : IDatabaseContext
 {
-    private readonly IConfiguration _configuration = configuration;
+    private readonly NpgsqlDataSource _dataSource = dataSource;
     private readonly ILogger<DatabaseContext> _logger = logger;
 
-    public IDbConnection CreateConnection() => new NpgsqlConnection(_configuration.GetConnectionString("PostgresConnection"));
+    public IDbConnection CreateConnection() => _dataSource.CreateConnection();
 
     public async Task Initialize()
     {

@@ -12,11 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.0" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MixMate.API\MixMate.API.csproj" />
+    <ProjectReference Include="..\MixMate.Core\MixMate.Core.csproj" />
     <ProjectReference Include="..\MixMate.Web\MixMate.Web.csproj" />
   </ItemGroup>
 
