@@ -7,12 +7,14 @@ WORKDIR /src
 COPY ["MixMate.API/MixMate.API.csproj", "MixMate.API/"]
 COPY ["MixMate.Core/MixMate.Core.csproj", "MixMate.Core/"]
 COPY ["MixMate.DataAccess/MixMate.DataAccess.csproj", "MixMate.DataAccess/"]
+COPY ["MixMate.ServiceDefaults/MixMate.ServiceDefaults.csproj", "MixMate.ServiceDefaults/"]
 RUN dotnet restore "MixMate.API/MixMate.API.csproj"
 
 #Build
 COPY ["MixMate.API/", "MixMate.API/"]
 COPY ["MixMate.Core/", "MixMate.Core/"]
 COPY ["MixMate.DataAccess/", "MixMate.DataAccess/"]
+COPY ["MixMate.ServiceDefaults/", "MixMate.ServiceDefaults/"] 
 RUN dotnet build "MixMate.API/MixMate.API.csproj" -o /app/build
 
 #Stage 2: Publish Stage

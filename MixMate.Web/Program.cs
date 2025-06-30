@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using MixMate.Web;
 using MixMate.Web.Components;
 using MixMate.Web.Interfaces;
@@ -5,6 +6,8 @@ using MixMate.Web.Services;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -15,9 +18,12 @@ builder.Services.AddMudServices();
 builder.Services.RegisterServices();
 builder.Services
     .AddMixMateGraphQLClient()
-    .ConfigureHttpClient(client =>
+    .ConfigureHttpClient((serviceProvider, client) =>
     {
         client.BaseAddress = new Uri("http://localhost:5165/graphql/");
+        // Log the resolved URL
+        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("GraphQL client base address: {BaseAddress}", client.BaseAddress);
     });
 
 builder.Services.AddScoped<IMixMateClient, MixMateClient>();
